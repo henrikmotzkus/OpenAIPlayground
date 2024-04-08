@@ -1,0 +1,58 @@
+@page "/search"
+
+@using System.Text.Json;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Text
+@inject HttpClient Http 
+
+<PageTitle>Search</PageTitle>
+
+<h1>Search results</h1>
+
+<p><button class="btn btn-primary" @onclick="SearchAPI">Start Search</button></p>
+
+
+<pre>@htmlresponse</pre>
+
+@code {
+
+    String htmlresponse = "";
+    protected async Task SearchAPI()
+    {
+        try
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(new
+                {
+                        queryType = "simple",
+                        search = "motel",
+                        filter = "",
+                        select = "HotelName,Description,Category,Tags",
+                        count = true
+                    }),
+                    Encoding.UTF8,
+                    "application/json");
+            using HttpResponseMessage response = await Http.PostAsync("indexes/hotels-sample-index/docs/search?api-version=2023-11-01", jsonContent);
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            //htmlresponse = jsonResponse;
+            htmlresponse = PrettyJson(jsonResponse);
+            Console.WriteLine($"{htmlresponse}\n");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    public string PrettyJson(string unPrettyJson)
+    {
+        var options = new JsonSerializerOptions(){
+            WriteIndented = true
+        };
+
+        var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
+
+        return JsonSerializer.Serialize(jsonElement, options);
+    }
+
+}
