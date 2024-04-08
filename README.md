@@ -9,5 +9,8 @@
 
 
 ## App registration
+Permission for Search 
 ![App registration](image1.png)
+
+The client as SPA
 ![App registration](image2.png)
