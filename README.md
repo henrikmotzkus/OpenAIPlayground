@@ -15,8 +15,8 @@
 
 ## Hosting on developer static web app in Azure
 
-Deploy a static web app 
-https://learn.microsoft.com/en-us/azure/static-web-apps/deploy-blazor
+1. Fork to your repository
+2. Deploy a static web app https://learn.microsoft.com/en-us/azure/static-web-apps/deploy-blazor
 
 
 ## App registration

@@ -30,16 +30,11 @@
 <p>
     <button class="btn btn-primary" @onclick="SearchAPI">Start Search</button>
 </p>
-
-
 <pre>@htmlresponse</pre>
 
 @code {
-
-
     String searchTerm = "";
     String selectedIndex = "";
-
     String htmlresponse = "";
     protected async Task SearchAPI()
     {
@@ -60,7 +55,7 @@
             var jsonResponse = await response.Content.ReadAsStringAsync();
             //htmlresponse = jsonResponse;
             htmlresponse = PrettyJson(jsonResponse);
-            Console.WriteLine($"{htmlresponse}\n");
+            //Console.WriteLine($"{htmlresponse}\n");
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -75,8 +70,6 @@
         };
 
         var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
-
         return JsonSerializer.Serialize(jsonElement, options);
     }
-
 }
