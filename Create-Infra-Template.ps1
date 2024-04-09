@@ -1,4 +1,4 @@
-# Getting an token for manual API request
+# Getting an token for manual API request and permission handling 
 $TenantID = "<YOUR Tenant ID>"
 Import-Module -Name Az
 Import-Module -Name AzureAD
@@ -16,7 +16,7 @@ $indexname = "hotels-sample-index"
 $scopedef = "Search Index Data Reader"
 $scope = "/subscriptions/$subscriptionid/resourceGroups/$rgname/providers/Microsoft.Search/searchServices/$searchservice/indexes/$indexname"
 
-# Assign a user to an specific index
+# Assign a role to a user to an specific index
 New-AzRoleAssignment -ObjectId $objectid -RoleDefinitionName $scopedef -Scope $scope
 get-azroleassignment -Scope $scope
 remove-azroleassignment -Scope $scope -ObjectId $objectid -RoleDefinitionName $scopedef
