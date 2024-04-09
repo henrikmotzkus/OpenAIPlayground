@@ -1,3 +1,3 @@
-OpenAIClient/bin/
-OpenAIClient/obj/
+OpenAIClient/OpenAIClient/bin/
+OpenAIClient/OpenAIClient/obj/
 *secrets*
