@@ -4,7 +4,9 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using System.Text
 @using System.Reflection
+@using System.Security.Claims
 @inject HttpClient Http 
+@inject IAuthorizationService AuthorizationService
 
 <PageTitle>Search</PageTitle>
 
@@ -16,26 +18,97 @@
         <InputText class="form-control" id="exampleFormControlInput1" placeholder="motel" @bind-Value="@searchTerm" />
     </div>
 </p>
-<p>
-    <div>
-        <label>
-            Select index
-            <InputSelect class="form-select form-select-sm" aria-label=".form-select-sm example" @bind-Value="@selectedIndex">
-                <option value="hotels-sample-index">Index 1</option>
-                <option value="hotels-sample-index-2">Index 2</option>
-            </InputSelect>
-        </label>
-    </div>
-</p>
-<p>
-    <button class="btn btn-primary" @onclick="SearchAPI">Start Search</button>
-</p>
+
+
+@if (role.Contains("NONE"))
+{
+    <p>
+       You don't have a an appropriate role. Please contact admin. 
+    </p>
+}
+else if (role.Contains("Administrator.ReadAll"))
+{
+    <p>
+        <div>
+            <label>
+                Youre role <em>@role</em>. Please select index
+                <InputSelect class="form-select form-select-sm" aria-label=".form-select-sm example" @bind-Value="@selectedIndex">
+                    <option value="hotels-sample-index">Index 1</option>
+                    <option value="hotels-sample-index-2">Index 2</option>
+                </InputSelect>
+            </label>
+        </div>
+    </p>
+    <p>
+        <button class="btn btn-primary" @onclick="SearchAPI">Start Search</button>
+    </p>
+}
+else if (!role.Contains("Administrator.ReadAll"))
+{
+    <p>
+        <div>
+            <label>
+                Youre role <em>@role</em>.
+                Accordingly to your role you have access to index <em>@selectedIndex</em>
+            </label>
+        </div>
+    </p>
+    <p>
+        <button class="btn btn-primary" @onclick="SearchAPI">Start Search</button>
+    </p>
+} 
+
 <pre>@htmlresponse</pre>
 
 @code {
     String searchTerm = "";
-    String selectedIndex = "";
+    String selectedIndex = "No access to an index";
     String htmlresponse = "";
+    String role = "No role. Please contact admin";
+    string claimrole = "NONE";
+    IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            claimrole = user.FindFirst(c => c.Type == "roles")?.Value;
+
+            claims = user.Claims;
+
+            if (user is not null)
+            {
+                try
+                {
+                    if (claimrole.Contains("Index1.Read"))
+                    {
+                        role = "Index1.Read";
+                        selectedIndex = "hotels-sample-index";
+                    }
+                    else if (claimrole.Contains("Index2.Read"))
+                    {
+                        role = "Index2.Read";
+                        selectedIndex = "hotels-sample-index-2";
+                    }
+                    else if (claimrole.Contains("Administrator.ReadAll"))
+                    {
+                        role = "Administrator.ReadAll";
+                    }
+                } catch (Exception e)
+                {
+                    role = "NONE";
+                }
+            }
+        }
+    }
+
+
     protected async Task SearchAPI()
     {
         try
@@ -43,15 +116,15 @@
             using StringContent jsonContent = new(
                 JsonSerializer.Serialize(new
                 {
-                        queryType = "simple",
-                        search = searchTerm,
-                        filter = "",
-                        select = "HotelName,Description,Category,Tags",
-                        count = true
-                    }),
+                    queryType = "simple",
+                    search = searchTerm,
+                    filter = "",
+                    select = "HotelName,Description,Category,Tags",
+                    count = true
+                }),
                     Encoding.UTF8,
                     "application/json");
-            using HttpResponseMessage response = await Http.PostAsync("indexes/" + selectedIndex +"/docs/search?api-version=2023-11-01", jsonContent);
+            using HttpResponseMessage response = await Http.PostAsync("indexes/" + selectedIndex + "/docs/search?api-version=2023-11-01", jsonContent);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             //htmlresponse = jsonResponse;
             htmlresponse = PrettyJson(jsonResponse);

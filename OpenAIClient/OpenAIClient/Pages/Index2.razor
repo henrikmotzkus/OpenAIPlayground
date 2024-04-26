@@ -1,0 +1,70 @@
+@page "/index2"
+
+@using System.Text.Json;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Text
+@using System.Reflection
+@using Microsoft.AspNetCore.Authorization
+@inject HttpClient Http 
+@attribute [Authorize(Policy = "Index2")]
+
+<PageTitle>Search Index 2</PageTitle>
+
+<h1>Search in Azure AI Search Index 2</h1>
+
+<p>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Search term</label>
+        <InputText class="form-control" id="exampleFormControlInput1" placeholder="motel" @bind-Value="@searchTerm" />
+    </div>
+</p>
+<p>
+    <button class="btn btn-primary" @onclick="SearchAPI">Start Search</button>
+</p>
+<pre>@htmlresponse</pre>
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    String searchTerm = "";
+    String selectedIndex = "";
+    String htmlresponse = "";
+    protected async Task SearchAPI()
+    {
+        try
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(new
+                {
+                        queryType = "simple",
+                        search = searchTerm,
+                        filter = "",
+                        select = "HotelName,Description,Category,Tags",
+                        count = true
+                    }),
+                    Encoding.UTF8,
+                    "application/json");
+            using HttpResponseMessage response = await Http.PostAsync("indexes/hotels-sample-index-2/docs/search?api-version=2023-11-01", jsonContent);
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            //htmlresponse = jsonResponse;
+            htmlresponse = PrettyJson(jsonResponse);
+            //Console.WriteLine($"{htmlresponse}\n");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    public string PrettyJson(string unPrettyJson)
+    {
+        var options = new JsonSerializerOptions(){
+            WriteIndented = true
+        };
+
+        var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
+        return JsonSerializer.Serialize(jsonElement, options);
+    }
+}

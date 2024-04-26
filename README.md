@@ -5,6 +5,8 @@
 1. Search Service is already setup
 2. Demo hotel data is already imported
 3. App is registered in AAD tenant
+4. Role is created in Entra
+5. User has role
 
 ## Hosting on developer machine
 
@@ -25,3 +27,6 @@ Permission for Search
 
 The client as SPA
 ![App registration](image2.png)
+
+## Roles
+In order to restrict users to an specific index I use roles of Entra ID. 

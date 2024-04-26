@@ -1,0 +1,126 @@
+{
+	"id": "50bb76a1-21b5-4be0-8f7b-0f825b299166",
+	"acceptMappedClaims": null,
+	"accessTokenAcceptedVersion": null,
+	"addIns": [],
+	"allowPublicClient": null,
+	"appId": "5c143457-7185-403c-90e4-1d1a268c7f0e",
+	"appRoles": [
+		{
+			"allowedMemberTypes": [
+				"User"
+			],
+			"description": "Can read Index 2",
+			"displayName": "Index2",
+			"id": "aaeba1fc-bfcc-4594-92a3-4ba014773c02",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"value": "Index2.Read"
+		},
+		{
+			"allowedMemberTypes": [
+				"User"
+			],
+			"description": "Can read Index 1",
+			"displayName": "Index1",
+			"id": "c363ceb0-ca4e-433e-ae3e-c1017bd6e52a",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"value": "Index1.Read"
+		}
+	],
+	"oauth2AllowUrlPathMatching": false,
+	"createdDateTime": "2024-04-05T13:06:22Z",
+	"description": null,
+	"certification": null,
+	"disabledByMicrosoftStatus": null,
+	"groupMembershipClaims": "All",
+	"identifierUris": [],
+	"informationalUrls": {
+		"termsOfService": null,
+		"support": null,
+		"privacy": null,
+		"marketing": null
+	},
+	"keyCredentials": [],
+	"knownClientApplications": [],
+	"logoUrl": null,
+	"logoutUrl": null,
+	"name": "OpenAIClient",
+	"notes": null,
+	"oauth2AllowIdTokenImplicitFlow": false,
+	"oauth2AllowImplicitFlow": false,
+	"oauth2Permissions": [],
+	"oauth2RequirePostResponse": false,
+	"optionalClaims": {
+		"idToken": [
+			{
+				"name": "groups",
+				"source": null,
+				"essential": false,
+				"additionalProperties": []
+			}
+		],
+		"accessToken": [
+			{
+				"name": "groups",
+				"source": null,
+				"essential": false,
+				"additionalProperties": []
+			}
+		],
+		"saml2Token": [
+			{
+				"name": "groups",
+				"source": null,
+				"essential": false,
+				"additionalProperties": []
+			}
+		]
+	},
+	"orgRestrictions": [],
+	"parentalControlSettings": {
+		"countriesBlockedForMinors": [],
+		"legalAgeGroupRule": "Allow"
+	},
+	"passwordCredentials": [],
+	"preAuthorizedApplications": [],
+	"publisherDomain": "henrikmotzkuse5.onmicrosoft.com",
+	"replyUrlsWithType": [
+		{
+			"url": "https://proud-tree-03a481803.5.azurestaticapps.net/authentication/login-callback",
+			"type": "Spa"
+		},
+		{
+			"url": "https://localhost/authentication/login-callback",
+			"type": "Spa"
+		}
+	],
+	"requiredResourceAccess": [
+		{
+			"resourceAppId": "880da380-985e-4198-81b9-e05b1cc53158",
+			"resourceAccess": [
+				{
+					"id": "a4165a31-5d9e-4120-bd1e-9d88c66fd3b8",
+					"type": "Scope"
+				}
+			]
+		},
+		{
+			"resourceAppId": "00000003-0000-0000-c000-000000000000",
+			"resourceAccess": [
+				{
+					"id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+					"type": "Scope"
+				}
+			]
+		}
+	],
+	"samlMetadataUrl": null,
+	"signInUrl": null,
+	"signInAudience": "AzureADMyOrg",
+	"tags": [],
+	"tokenEncryptionKeyId": null
+}
